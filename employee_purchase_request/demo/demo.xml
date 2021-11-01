@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+
+        <record id="employee_user_demo" model="res.users">
+<!--            <field name="partner_id" ref="base.partner_demo"/>-->
+            <field name="name">Employee 1</field>
+            <field name="login">employee@yourcompany.com</field>
+            <field name="password">123456</field>
+            <field name="user_type">Employee</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="image" type="base64" file="base/static/img/user_demo-image.jpg"/>
+        </record>
+
+        <record id="manager_user_demo" model="res.users">
+            <field name="name">Manager</field>
+            <field name="login">manager@yourcompany.com</field>
+            <field name="password">123456</field>
+            <field name="user_type">Manager</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="image" type="base64" file="base/static/img/user_demo-image.jpg"/>
+        </record>
+
+        <record id="internal_user_demo" model="res.users">
+            <field name="name">Internal</field>
+            <field name="login">internal@yourcompany.com</field>
+            <field name="password">123456</field>
+            <field name="user_type">Internal</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="image" type="base64" file="base/static/img/user_demo-image.jpg"/>
+        </record>
+    </data>
+</odoo>

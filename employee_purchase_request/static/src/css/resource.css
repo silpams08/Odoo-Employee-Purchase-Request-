@@ -1,0 +1,350 @@
+.image-section img{
+width: 100%;
+height:250px;
+position: relative;
+object-fit: cover;
+}
+
+.user-profile-part{
+padding-bottom:30px;
+background-color:#FAFAFA;
+}
+
+.user-image{
+position: absolute;
+margin-top:-50px;
+border: 1px solid white;
+margin-left: 32%;
+}
+
+.user-image img{
+width:100px;
+height:100px;
+}
+
+.follow{
+width:50%;
+margin-top:70px;
+}
+
+.user-detail-section2 p{
+font-size:12px;
+padding: 0px;
+margin: 0px;
+}
+
+.user-detail-section2{
+margin-top:10px;
+}
+
+.user-detail-section2 span{
+color:#7CBBC3;
+font-size: 20px;
+}
+
+.user-detail-section2 small{
+font-size:12px;
+color:#D3A86A;
+}
+
+.profile-right-section{
+padding: 20px 0px 10px 15px;
+background-color: #FFFFFF;
+}
+
+.profile-right-section-row{
+margin: 0px;
+}
+
+.multi-select .btn-group, .multi-select .btn-group .multiselect{
+width:100%;
+background: white;
+border: 1px solid #ced4da;
+border-radius: 0.25rem;
+}
+
+.multi-select btn.disabled, .multi-select .btn:disabled {
+opacity: 1 !important;
+color:#495057;
+background-color: #e9ecef;
+border: 1px solid #ced4da;
+width: 100%;
+text-align: left;
+}
+
+.nav-pills-custom .nav-link {
+color: #aaa;
+background: #fff;
+position: relative;
+}
+
+.nav-pills-custom .nav-link.active {
+color: var(--primary);
+background: #fff;
+}
+.nav-pills-custom .nav-link.active::before {
+opacity: 1;
+}
+
+/* Add indicator arrow for the active tab */
+@media (min-width: 992px) {
+.nav-pills-custom .nav-link::before {
+content: '';
+display: block;
+border-top: 8px solid transparent;
+border-left: 10px solid #fff;
+border-bottom: 8px solid transparent;
+position: absolute;
+top: 50%;
+right: -10px;
+transform: translateY(-50%);
+opacity: 0;
+}
+}
+.social {
+    padding:0px;
+    padding-right: 1em;
+}
+.social .fa {
+padding: 5px 8px;
+font-size: 20px;
+text-align: center;
+text-decoration: none;
+}
+
+.fa-facebook {
+background: #3B5998;
+color: white;
+}
+
+.fa-twitter {
+background: #55ACEE;
+color: white;
+}
+
+.fa-youtube {
+background: #bb0000;
+color: white;
+}
+
+.fa-instagram {
+background: #125688;
+color: white;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+-moz-appearance: textfield;
+}
+
+.business-hours .title {
+padding-left: 5px;
+border-left: 4px solid var(--primary);
+}
+
+.business-hours li {
+line-height: 30px;
+border-bottom: 1px solid #d2d2d2;
+padding: 0.25em 3em;
+}
+.gallery_img {
+width: 100%;
+height: 180px;
+overflow: hidden;
+}
+.gallery_img img {
+    width: 100%;
+    height: 100%;
+    object-fit:cover;
+    padding:5px;
+}
+
+.fill_field_error {
+z-index: 9;
+position: absolute;
+width: 100%;
+height: 100%;
+margin-top: 20px;
+height: auto;
+}
+
+.progress {
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+    -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+    -o-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+}
+
+.progress {
+    display: flex;
+    height: 4px;
+    overflow: hidden;
+    font-size: .65625rem;
+    background-color: rgba(120,130,140,.13);
+    border-radius: 0;
+    box-shadow: inset 0 0.1rem 0.1rem rgba(0,0,0,.1);
+}
+
+/*Reservation tab product table, add new product css*/
+.popup-new input[type=text], .popup-new select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: #009245;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+#form-wrapper {
+    background-color:rgb(90 90 90 / 50%);
+    width: 100%;
+    height: 100vh;
+    padding: 0;
+    display: none;
+    position: absolute;
+    top: 0;
+}
+#form-div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    position: absolute;
+    display: none;
+    width: 80%;
+    margin: 0 10%;
+    top: 150px;
+}
+#table-div{
+    background-color: #777777;
+}
+#close-form{
+    width: 45px;
+    height: 40px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    text-align: center;
+    line-height: 36px;
+    z-index: 999;
+}
+#close-form:hover{
+    opacity: .6;
+}
+#add-button{
+    width: 100%;
+    padding: 7px 20px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 36px;
+    border: none;
+}
+#filter-button{
+    width: 100%;
+    padding: 7px 20px;
+    background: #009245;
+    color: #ffffff;
+    cursor: pointer;
+    text-align: center;
+    line-height: 36px;
+    border: none;
+}
+#filter-button:hover,#add-button:hover,.edit-action:hover,.delete-action:hover{
+    opacity: .7;
+}
+table {
+    width:100%;
+}
+table, th, td {
+    border-collapse: collapse;
+}
+#t01 tr td {
+    padding: 10px;
+    text-align: left;
+    fon-size: medium;
+}
+#t01 tr:nth-child(even) {
+    background-color: #eee;
+}
+#t01 tr:nth-child(odd) {
+    background-color: #fff;
+}
+#t01 th {
+    background-color: var(--primary);
+    padding: 10px;
+/*    background-color: #009245;*/
+    color: white;
+}
+#t01{
+    margin: 15px;
+    overflow-y: auto;
+}
+.top-navi{
+    margin: 10px 0 0 0!important;
+    padding-left:10px;
+}
+#search-box button{
+    float: right;
+    padding: 6px 10px;
+    margin-top: 8px;
+    margin-right: 16px;
+    background: #ddd;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    border-radius: 0 10px 10px 0;
+}
+#search-box input{
+    border-radius: 10px 0 0 10px;
+}
+.edit-action{
+    border:none;
+    padding: 6px 10px;
+    border-radius: 3px;
+    margin: 0 5px 5px 0;
+}
+.delete-action{
+    border:none;
+    padding: 6px 12px;
+    border-radius: 3px;
+}
+
+/*MyTable Subscription tab css*/
+
+div.card-dashboard {
+    height:180px;
+    border: 4px solid var(--primary);
+    border-radius: 25px;
+}
+div.dashboard-thumbnail {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+div.dashboard-thumbnail > img {
+    width:115px;
+}

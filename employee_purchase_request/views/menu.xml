@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <menuitem name="Purchase Request"
+            id="menu_purchase_request_root" web_icon="employee_purchase_request,static/description/icon.png"
+            sequence="25"/>
+
+        <menuitem name="Request" id="purchase_request_menu" parent="menu_purchase_request_root"
+                  action="employee_purchase_request.purchase_request_action" sequence="1"/>
+    </data>
+</odoo>

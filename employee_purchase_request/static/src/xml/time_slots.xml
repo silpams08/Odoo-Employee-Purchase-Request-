@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="TimeSlotsTable">
+        <t t-jquery="div.timeslot_box" t-operation="attributes">
+            <attribute name="t-att-data-pending">slot.is_pending</attribute>
+        </t>
+    </t>
+</templates>

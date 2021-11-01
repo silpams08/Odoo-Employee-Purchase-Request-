@@ -1,0 +1,93 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="employee_purchase_request_form">
+            <field name="name">Purchase Request Form</field>
+            <field name="model">purchase.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button type="object" name="action_approve" class="oe_highlight" string="Approve" attrs="{'invisible': [('state','not in', ['Draft'])]}"/>
+                        <button type="object" name="action_reject" class="oe_highlight" string="Reject" attrs="{'invisible': [('state','not in', ['Draft'])]}"/>
+                        <button type="object" name="action_buy_product" class="oe_highlight" string="Buy Product" attrs="{'invisible': [('state','not in', ['Approved'])]}"/>
+                        <button type="object" name="action_done" class="oe_highlight" string="Done" attrs="{'invisible': [('state','not in', ['Ready to pick - up'])]}"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="Order Reference"/>
+                            </h1>
+                        </div>
+                        <group col="3">
+                            <group>
+                                <field name="employee_id"/>
+                                <field name="partner_id" invisible="1"/>
+                                <field name="user_id" invisible="1"/>
+                                <field name="email"/>
+                                <field name="mobile"/>
+                                <field name="employee_company"/>
+                                <field name="attachment_ids"  widget="many2many_binary" string="Attach file" class="oe_inline"/>
+                            </group>
+                            <group>
+                                <field name="product_id"/>
+                                <field name="category_id" invisible="1"/>
+                                <field name="color" attrs="{'invisible': [('color', '=', False)]}"/>
+                                <field name="size" attrs="{'invisible': [('size', '=', False)]}"/>
+                                <label for="quantity"/>
+                                <div>
+                                    <field name="quantity"/> X
+                                    <field name="price"  widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </div>
+                                <field name="taxes_id" widget="many2many_tags"/>
+                                <field name="vendor_id"/>
+                                <field name="picking_date" widget="date" attrs="{'invisible': [('picking_date', '=', False)]}"/>
+                            </group>
+                            <group>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="amount_untaxed"  widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="employee_purchase_request_tree">
+            <field name="name">Purchase Request Tree</field>
+            <field name="model">purchase.request</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="mobile"/>
+                    <field name="vendor_id"/>
+                    <field name="product_id"/>
+                    <field name="quantity"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="purchase_request_action">
+            <field name="name">Requests</field>
+            <field name="res_model">purchase.request</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="view_picking_form_inherit_employee_pr" model="ir.ui.view">
+            <field name="name">Stock Picking Form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group/group/field[@name='origin']" position="after">
+                    <field name="date_picking" widget="date" string="Picking Date" attrs="{'required': [('state', '=', 'assigned')]}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

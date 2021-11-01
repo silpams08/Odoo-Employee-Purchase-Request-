@@ -1,0 +1,22 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="employee_purchase_request_res_users_form">
+            <field name="name">User Form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="before">
+                    <group>
+                        <field name="user_type" widget="radio"/>
+                    </group>
+                </xpath>
+                <xpath expr="//notebook" position="attributes">
+                    <attribute name="attrs">{'invisible': [('user_type', '!=', 'Internal')]}</attribute>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_title')]/group/field[@name='partner_id']" position="after">
+                    <field name="employee_ids" widget="many2many_tags"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

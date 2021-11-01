@@ -1,0 +1,34 @@
+<odoo>
+    <data>
+
+        <template id="employee_purchase_request_script" inherit_id="web.assets_frontend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round"/>
+                <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+
+                <link rel="stylesheet"
+                      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+                <link rel="stylesheet"
+                      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css"/>
+
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"/>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"/>
+                <link rel="stylesheet"
+                      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css"/>
+
+                <link rel="stylesheet" href="/employee_purchase_request/static/src/css/orders.css"/>
+
+
+<!--                <script type="text/javascript" src="/employee_purchase_request/static/src/js/resource_page.js"/>-->
+<!--                <script type="text/javascript" src="/employee_purchase_request/static/src/js/appointment.js"/>-->
+                <script type="text/javascript" src="/employee_purchase_request/static/src/js/orders.js"/>
+            </xpath>
+        </template>
+        <template id="_assets_primary_variables_inherit" inherit_id="web._assets_primary_variables">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" type="text/scss" href="/employee_purchase_request/static/src/css/variable.scss"/>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

@@ -1,0 +1,26 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="purchase_request_employee_form">
+            <field name="name">Employee Form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='hr_settings']/group/group[last()]" position="after">
+                    <group string="Purchase Configuration">
+                        <field name="allowed_category_ids" widget="many2many_tags"/>
+                        <field name="allowed_product_qty" widget="radio" options="{'horizontal': true}"/>
+                        <field name="custom_tax_id"/>
+                    </group>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_title')]/h1" position="after">
+                    <field name="employee_type" widget="radio" options="{'horizontal': true}"/>
+                    <field name="rejected_month" invisible="1"/>
+                    <p class="text-danger" attrs="{'invisible': [('rejected_month', '=', False)]}" >This Employee's order was rejected for this month.A new one can be created on next month.</p>
+                </xpath>
+                <xpath expr="//field[@name='category_ids']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

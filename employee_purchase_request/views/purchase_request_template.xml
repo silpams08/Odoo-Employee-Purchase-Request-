@@ -1,0 +1,721 @@
+<odoo>
+    <data>
+
+        <!--<template id="orders" name="Orders">
+            <t t-call="portal.portal_layout">
+                &lt;!&ndash;<t t-set="no_breadcrumbs" t-value="True"/>
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>&ndash;&gt;
+                <div id="wrap" class="oe_structure oe_empty">
+                    <div class="container" id="order_list">
+                        <div class="table-responsive mt-4">
+                            <div class="table-wrapper">
+                                <div class="table-title">
+                                    <div class="row">
+                                        <h2>
+                                            <b>Orders</b>
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div class="row pb-3">
+                                    <div class="col-sm-12 col-lg-6 pull-left">
+                                        <a t-attf-href="/orders/new" class="btn btn-primary">
+                                            &lt;!&ndash;                                            <i class="material-icons">&#xE147;</i>&ndash;&gt;
+                                            <b>CREATE</b>
+                                        </a>
+                                    </div>
+                                    <div class="pull-right col-sm-12 col-lg-6">
+                                        <div id="search-box" class="d-flex float-right">
+                                            <button type="button"
+                                                    class="btn btn-secondary text-dark dropdown-toggle dropdown-toggle-split top-navi"
+                                                    style="border-radius: 10px 0 0 10px;"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-filter"/>
+                                                <span class="caret">&amp;nbsp;</span>
+                                            </button>
+                                            <input class="top-navi" type="text" placeholder="Search.."
+                                                   id="search_order" style="border-radius:0px 0 0 0px"/>
+                                            <button class="top-navi" style="cursor:auto;">
+                                                <i class="fa fa-search"/>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <ul id="order_filter" class="category_filters">
+                                                    <li data-value="All">
+                                                        <a href="#" class="text-dark selected">
+                                                            <i class="fa fa-check"/>
+                                                            <span class="search-option">All</span>
+                                                        </a>
+                                                    </li>
+                                                    <li data-value="Draft">
+                                                        <a href="#" class="text-dark">
+                                                            <i class="fa fa-check"/>
+                                                            <span class="search-option">Draft</span>
+                                                        </a>
+                                                    </li>
+                                                    <li data-value="Approved">
+                                                        <a href="#" class="text-dark">
+                                                            <i class="fa fa-check"/>
+                                                            <span class="search-option">Approved</span>
+                                                        </a>
+                                                    </li>
+                                                    <li data-value="Rejected">
+                                                        <a href="#" class="text-dark">
+                                                            <i class="fa fa-check"/>
+                                                            <span class="search-option">Rejected</span>
+                                                        </a>
+                                                    </li>
+                                                    <li data-value="Purchase in progress">
+                                                        <a href="#" class="text-dark">
+                                                            <i class="fa fa-check"/>
+                                                            <span class="search-option">Purchase in progress</span>
+                                                        </a>
+                                                    </li>
+                                                    <li data-value="Ready to pick-up">
+                                                        <a href="#" class="text-dark">
+                                                            <i class="fa fa-check"/>
+                                                            <span class="search-option">Ready to pick-up</span>
+                                                        </a>
+                                                    </li>
+                                                    <li data-value="Done">
+                                                        <a href="#" class="text-dark">
+                                                            <i class="fa fa-check"/>
+                                                            <span class="search-option">Done</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id="order_table" class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:25%">Order#</th>
+                                            <th style="width:25%">Order State</th>
+                                            <th style="width:10%">Date</th>
+                                            <th style="width:10%">Attached Documents</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <p t-if="not orders">No result found</p>
+                                        <tr t-foreach="orders" t-as="order" id="order">
+                                            <td>
+                                                <a t-attf-href="/orders/#{order.id}">
+                                                    <span t-field="order.name"/>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <t t-esc="order.state"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="order.order_date"/>
+                                            </td>
+                                            <td>
+                                                2
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>-->
+
+        <template id="orders" name="My Orders">
+            <t t-call="portal.portal_layout">
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+                <div class="table-title mt-2">
+                    <div class="row">
+                        <h2>
+                            <b>Orders</b>
+                        </h2>
+                    </div>
+                </div>
+                <div class="row" t-if="not request.env.user.has_group('employee_purchase_request.group_manager_portal')">
+                    <div class="col-sm-12 col-lg-6 pull-left">
+                        <a t-attf-href="/orders/new" t-att-class="'btn btn-primary disabled' if request.env.user.is_rejected_month() else 'btn btn-primary'">
+                            <!--                                            <i class="material-icons">&#xE147;</i>-->
+                            <b>CREATE</b>
+                        </a>
+                    </div>
+                    <div t-if="request.env.user.is_rejected_month()">
+                        <p class="text-danger">Your order was rejected for this month.A new one can be created on next month.</p>
+                    </div>
+                </div>
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Orders</t>
+                </t>
+                <!--                    <div class="pull-right col-sm-12 col-lg-6">-->
+                <!--                        <div id="search-box" class="d-flex float-right">-->
+                <!--                            <button type="button"-->
+                <!--                                    class="btn btn-secondary text-dark dropdown-toggle dropdown-toggle-split top-navi"-->
+                <!--                                    style="border-radius: 10px 0 0 10px;"-->
+                <!--                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+                <!--                                <i class="fa fa-filter"/>-->
+                <!--                                <span class="caret">&amp;nbsp;</span>-->
+                <!--                            </button>-->
+                <!--                            <input class="top-navi" type="text" placeholder="Search.."-->
+                <!--                                   id="search_order" style="border-radius:0px 0 0 0px"/>-->
+                <!--                            <button class="top-navi" style="cursor:auto;">-->
+                <!--                                <i class="fa fa-search"/>-->
+                <!--                            </button>-->
+                <!--                            <div class="dropdown-menu dropdown-menu-right">-->
+                <!--                                <ul id="order_filter" class="category_filters">-->
+                <!--                                    <li data-value="All">-->
+                <!--                                        <a href="#" class="text-dark selected">-->
+                <!--                                            <i class="fa fa-check"/>-->
+                <!--                                            <span class="search-option">All</span>-->
+                <!--                                        </a>-->
+                <!--                                    </li>-->
+                <!--                                    <li data-value="Draft">-->
+                <!--                                        <a href="#" class="text-dark">-->
+                <!--                                            <i class="fa fa-check"/>-->
+                <!--                                            <span class="search-option">Draft</span>-->
+                <!--                                        </a>-->
+                <!--                                    </li>-->
+                <!--                                    <li data-value="Approved">-->
+                <!--                                        <a href="#" class="text-dark">-->
+                <!--                                            <i class="fa fa-check"/>-->
+                <!--                                            <span class="search-option">Approved</span>-->
+                <!--                                        </a>-->
+                <!--                                    </li>-->
+                <!--                                    <li data-value="Rejected">-->
+                <!--                                        <a href="#" class="text-dark">-->
+                <!--                                            <i class="fa fa-check"/>-->
+                <!--                                            <span class="search-option">Rejected</span>-->
+                <!--                                        </a>-->
+                <!--                                    </li>-->
+                <!--                                    <li data-value="Purchase in progress">-->
+                <!--                                        <a href="#" class="text-dark">-->
+                <!--                                            <i class="fa fa-check"/>-->
+                <!--                                            <span class="search-option">Purchase in progress</span>-->
+                <!--                                        </a>-->
+                <!--                                    </li>-->
+                <!--                                    <li data-value="Ready to pick-up">-->
+                <!--                                        <a href="#" class="text-dark">-->
+                <!--                                            <i class="fa fa-check"/>-->
+                <!--                                            <span class="search-option">Ready to pick-up</span>-->
+                <!--                                        </a>-->
+                <!--                                    </li>-->
+                <!--                                    <li data-value="Done">-->
+                <!--                                        <a href="#" class="text-dark">-->
+                <!--                                            <i class="fa fa-check"/>-->
+                <!--                                            <span class="search-option">Done</span>-->
+                <!--                                        </a>-->
+                <!--                                    </li>-->
+                <!--                                </ul>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+
+                <t t-if="not orders">
+                    <p>There are currently no orders.</p>
+                </t>
+                <t t-if="orders" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th style="width:25%">Order#</th>
+                            <th style="width:25%">Order State</th>
+                            <th style="width:10%">Date</th>
+                            <th style="width:10%">Attached Documents</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order_table">
+                        <t t-foreach="orders" t-as="order" id="order">
+                            <tr id="order">
+                                <td>
+                                    <a t-attf-href="/orders/#{order.id}">
+                                        <span t-field="order.name"/>
+                                    </a>
+                                </td>
+                                <td>
+                                    <t t-esc="order.state"/>
+                                </td>
+                                <td>
+                                    <t t-esc="order.order_date"/>
+                                </td>
+                                <td>
+                                    <t t-esc="len(order.attachment_ids)"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </t>
+            </t>
+        </template>
+
+        <template id="order_detail" name="Order Details">
+            <t t-call="portal.portal_layout">
+                <t t-set="no_breadcrumbs" t-value="True"/>
+                <div id="wrap">
+                    <div class="container oe_website_sale py-2">
+                        <div class="row">
+                            <div class="column col-12 mb-2" style="background:white;">
+                                <div class="col-6">
+                                    <div class="vd_title-section clearfix">
+                                        <ol class="breadcrumb mt-2 p-1" style="font-size:20px;">
+                                            <li class="breadcrumb-item">
+                                                <a href="/orders">Orders</a>
+                                            </li>
+                                            <li class="breadcrumb-item active">
+                                                <span t-field="order.name"/>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="col-6 pt-2">
+                                    <form t-attf-action="/order/#{order.id}/reject" method="post">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="submit" name="button_reject" id="button_reject" value="Reject"
+                                               class="btn btn-success pull-right mr-1" t-if="request.env.user.has_group('employee_purchase_request.group_manager_portal') and order.state=='Draft'"/>
+                                    </form>
+                                    <form t-attf-action="/order/#{order.id}/approve" method="post">
+<!--                                        <input type="hidden" name="order" t-att-value="order.id"/>-->
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="submit" name="button_approve" id="button_approve" value="Approve"
+                                               class="btn btn-success pull-right mr-1" t-if="request.env.user.has_group('employee_purchase_request.group_manager_portal') and order.state=='Draft'"/>
+                                    </form>
+                                    <form t-attf-action="/order/#{order.id}/buy-product" method="post">
+                                        <input type="submit" name="button_buy" id="button_buy" value="Buy Product"
+                                               class="btn btn-success pull-right mr-1" t-if="not request.env.user.has_group('employee_purchase_request.group_manager_portal') and order.state=='Approved'"/>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-8 oe_cart" style="background:white;">
+                                <div class="row pt-3">
+                                    <div class="col-lg-12">
+                                        <div class="column">
+                                            <div class="item">
+                                                <label for="employee_id">Employee
+                                                    <span>*</span>
+                                                </label>
+                                                <input type="text" class="form-control employee_id" name="employee_id"
+                                                       placeholder="Employee"
+                                                       t-att-value="order.partner_id.name if order.partner_id else ''"
+                                                       readonly="readonly"/>
+                                            </div>
+                                            <div class="item">
+                                                <label for="email">Email</label>
+                                                <input type="text" class="form-control email" name="email"
+                                                       placeholder="Email"
+                                                       t-att-value="order.email if order.email else ''"
+                                                       readonly="readonly"/>
+                                            </div>
+                                            <div class="item">
+                                                <label for="company_id">Company</label>
+                                                <input type="text" class="form-control company_id" name="company_id"
+                                                       placeholder="Company"
+                                                       t-att-value="order.company_id.name if order.company_id else ''"
+                                                       readonly="readonly"/>
+                                            </div>
+                                            <div class="item">
+                                                <label for="mobile">Mobile</label>
+                                                <input type="text" class="form-control mobile" name="mobile"
+                                                       placeholder="Mobile"
+                                                       t-att-value="order.mobile if order.mobile else ''"
+                                                       readonly="readonly"/>
+                                            </div>
+                                            <div class="item">
+                                                <label for="address">Address</label>
+                                                <div style="width:100%;">
+                                                    <input type="text" class="form-control mb-1 street" name="street"
+                                                           placeholder="Street" t-if="order.partner_id.street"
+                                                           t-att-value="order.partner_id.street" readonly="readonly"/>
+                                                    <input type="text" class="form-control mb-1 street2" name="street2"
+                                                           placeholder="Street2" t-if="order.partner_id.street2"
+                                                           t-att-value="order.partner_id.street2" readonly="readonly"/>
+                                                    <input type="text" class="form-control mb-1 city" name="city"
+                                                           placeholder="City" t-if="order.partner_id.city"
+                                                           t-att-value="order.partner_id.city" readonly="readonly"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="item" t-if="len(order.attachment_ids) &gt; 0">
+                                                <label>Attachment</label>
+                                                <t t-foreach="order.attachment_ids" t-as="attachment">
+                                                    <a t-attf-href="/web/content/#{attachment.id}?download=true" target="_blank">
+                                                        <div t-att-title="attachment.name" t-att-data-mimetype="attachment.mimetype" t-attf-data-src="/web/content/#{attachment.id}"/>
+                                                        <div class='oe_attachment_name w-100'><t t-raw='attachment.name'/></div>
+                                                    </a>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="p-1"/>
+                                <div class="row" t-if="order.product_id">
+                                    <div class="col-sm-12 col-md-12" style="display:inherit;">
+                                        <div class="col-sm-12 col-md-6">
+                                            <div class="p-3">
+                                                <img t-if="order.product_id.image" t-attf-src="data:image/png;base64,#{order.product_id.image}"
+                                                     height="256px"/>
+                                                <img t-else="" src="/web/static/src/img/placeholder.png"
+                                                                     height="256px"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 pull-right">
+                                            <div class="item">
+                                                <label for="product_id">Name
+                                                </label>
+                                                <input type="text" class="form-control product_name" name="product_id"
+                                                       placeholder="Product"
+                                                       t-att-value="order.product_id.name if order.product_id else ''"
+                                                       readonly="readonly"/>
+                                            </div>
+                                            <div class="item">
+                                                <label for="category">Category</label>
+                                                <input type="text" class="form-control email" name="category"
+                                                       placeholder="Email"
+                                                       t-att-value="order.product_id.categ_id.name if order.product_id else ''"
+                                                       readonly="readonly"/>
+                                            </div>
+                                            <div class="column">
+                                                <t t-if="order.color">
+                                                    <div class="item">
+                                                        <label for="company_id">Color</label>
+                                                        <input type="text" class="form-control color" name="color"
+                                                               placeholder="Color"
+                                                               t-att-value="order.color" readonly="readonly"/>
+                                                    </div>
+                                                </t>
+                                                <t t-if="order.size">
+                                                    <div class="item">
+                                                        <label for="mobile">Size</label>
+                                                        <input type="text" class="form-control size" name="size"
+                                                               placeholder="Size"
+                                                               t-att-value="order.size" readonly="readonly"/>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                            <div class="column">
+                                                <div class="item">
+                                                    <label for="quantity">Quantity</label>
+                                                    <input type="text" class="form-control quantity" name="quantity"
+                                                           placeholder="Quantity"
+                                                           t-att-value="order.quantity" readonly="readonly"/>
+                                                </div>
+                                                <div class="item">
+                                                    <label for="price">Price</label>
+                                                    <input type="text" class="form-control price" name="price"
+                                                           placeholder="Price"
+                                                           t-att-value="order.price" readonly="readonly"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-4">
+                                <div class="card js_cart_summary">
+                                    <div class="card-body">
+                                        <span class="column">
+                                            <h4 class="d-none d-xl-block item">Order Total</h4>
+                                            <p class="item"><t t-esc="order.state"/></p>
+                                        </span>
+
+                                        <hr class="d-none d-xl-block"/>
+                                        <div>
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr id="order_total_untaxed">
+                                                        <td class="text-right noborder">
+                                                            Subtotal:
+                                                        </td>
+                                                        <td class="text-xl-right noborder">
+                                                            <span t-field="order.amount_untaxed"
+                                                                  style="white-space: nowrap;"
+                                                                  t-options="{'widget': 'monetary', 'display_currency': order.currency_id}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="order_total_taxes">
+                                                        <td class="text-right noborder">
+                                                            <p>Taxes:</p>
+                                                        </td>
+                                                        <td class="text-xl-right noborder">
+                                                            <span t-field="order.amount_tax"
+                                                                  style="white-space: nowrap;"
+                                                                  t-options="{'widget': 'monetary', 'display_currency': order.currency_id}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="order_total">
+                                                        <td class="text-right">
+                                                            <strong>Total:</strong>
+                                                        </td>
+                                                        <td class="text-xl-right">
+                                                            <strong t-field="order.amount_total"
+                                                                    t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="new_order" name="New Order">
+            <t t-call="portal.portal_layout">
+                <div id="wrap">
+                    <div class="oe_structure" id="oe_structure_website_partner_partner_1"/>
+                    <div class="container">
+                        <div class="vd_content clearfix">
+                            <div class="vd_title-section clearfix">
+                                <ol t-if="not edit_page" class="breadcrumb mt-2 p-1" style="font-size:20px;">
+                                    <li class="breadcrumb-item">
+                                        <a href="/orders">Orders</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        <span>New</span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-xl-8 pb-3">
+                                <div class="tab-pane">
+                                    <div class="p-4">
+                                        <form t-attf-action="/orders/new" method="post" id="submit_form" enctype="multipart/form-data">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <!--                                            <input type="hidden" id="form_submit" name="form_submit"/>-->
+                                            <div class="vd_info tr">
+                                                <!--                                                <button t-attf-class="btn btn-success mr-4" id="button_submit">-->
+                                                <!--                                                    <i class="fa fa-save mr-1"/>-->
+                                                <!--                                                    SAVE-->
+                                                <!--                                                </button>-->
+                                                <input type="submit" name="button_submit" id="button_submit" value="Request Product" onClick="return confirm('Are you sure you want to proceed?');"
+                                                       class="btn btn-success" t-if="not request.env.user.has_group('employee_purchase_request.group_manager_portal') and not request.env.user.is_rejected_month()"/>
+                                            </div>
+                                            <h3 class="font-weight-bold mb-2 mt-0">
+                                                New Order Request
+                                            </h3>
+                                            <main>
+                                                <div class="row form-group">
+                                                    <div class="col-sm-6">
+                                                        <label class="col-form-label" for="partner_id">Employee</label>
+                                                        <input type="hidden" name="partner_id"
+                                                               t-att-value="partner_id"/>
+                                                        <input type="text" class="form-control"
+                                                               placeholder="Employee" readonly="readonly"
+                                                               t-att-value="partner_name if partner_name else ''"/>
+                                                        <input type="hidden" id="user" t-att-value="user.id"/>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="col-form-label" for="email">Email</label>
+                                                        <input type="text" class="form-control email" name="email"
+                                                               placeholder="Email" readonly="readonly"
+                                                               t-att-value="email if email else ''"/>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="col-form-label" for="mobile">Mobile</label>
+                                                        <input type="text" name="mobile"
+                                                               class="form-control mobile" readonly="readonly"
+                                                               placeholder="Mobile"
+                                                               t-att-value="mobile if mobile else ''"/>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label class="col-form-label" for="mobile">Attachment</label>
+                                                        <input type="file" id="attachment" name="attachment" accept="application/pdf"/>
+                                                    </div>
+                                                </div>
+                                                <hr class="p-1"/>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12" style="display:inherit;">
+                                                        <div class="col-sm-12 col-md-6">
+                                                            <div class="p-3">
+                                                                <img t-if="product_id and product_id.image"
+                                                                     alt="MENU IMAGE" width="256px"
+                                                                     t-att-src="image_data_uri(product_id.image)"/>
+                                                                <img t-if="product_template_id and product_template_id.image and not product_id"
+                                                                     alt="MENU IMAGE" width="256px"
+                                                                     t-att-src="image_data_uri(product_template_id.image)"/>
+                                                                <img t-if="not product_template_id or not product_template_id.image"
+                                                                     src="/web/static/src/img/placeholder.png"
+                                                                     height="256px"/>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-6 pull-right">
+                                                            <div class="item">
+                                                                <form>
+                                                                    <label for="product_template_id">Product
+                                                                        <span>*</span>
+                                                                    </label>
+                                                                    <select name="product_template_id"
+                                                                            class="form-control"
+                                                                            id="product_template_id">
+                                                                        <option value=''>Select Product</option>
+                                                                        <t t-foreach="products or []" t-as="product">
+                                                                            <option t-att-value="product.id"
+                                                                                    t-att-selected="product.id == product_template_id.id if product_template_id else False">
+                                                                                <t t-esc="product.name"/>
+                                                                            </option>
+                                                                        </t>
+                                                                    </select>
+                                                                </form>
+                                                            </div>
+                                                            <input type="hidden" class="product_id" name="product_id"
+                                                                   t-att-value="product_id.id if product_id else False"/>
+                                                            <input type="hidden" name="vendor_id" t-att-value="vendor_id if vendor_id else False"/>
+                                                            <t t-if="product_template_id">
+                                                                <!--                                                                <t t-set="product" t-value="products.filtered(lambda p: p.id == product_template_id)"/>-->
+                                                                <form method="get" class="item">
+
+                                                                    <input type="hidden" class="product_id"
+                                                                           name="product_id"
+                                                                           t-att-value="product_id.id if product_id else False"/>
+                                                                    <input type="hidden" class="product_template_id"
+                                                                           name="product_template_id"
+                                                                           t-att-value="product_template_id.id if product_template_id else False"/>
+                                                                    <input type="hidden" t-att-value="quantity"
+                                                                           name="quantity" id="quantity"/>
+
+                                                                    <input type="hidden" id="vendor_id" name="vendor_id" t-att-value="vendor_id if vendor_id else False"/>
+
+                                                                    <ul class="nav nav-pills flex-column mt16">
+                                                                        <t t-foreach="attributes" t-as="a">
+                                                                            <li t-if="a.value_ids and len(a.value_ids) &gt; 0"
+                                                                                class="nav-item">
+                                                                                <div>
+                                                                                    <strong t-field="a.attribute_id.name"/>
+                                                                                </div>
+                                                                                <select class="form-control attrib"
+                                                                                        name="attrib">
+                                                                                    <option value=""/>
+                                                                                    <t t-foreach="a.value_ids" t-as="v">
+                                                                                        <option t-att-value="'%s-%s' % (a.id,v.id)"
+                                                                                                t-esc="v.name"
+                                                                                                t-att-selected="v.id in attrib_set"/>
+                                                                                    </t>
+                                                                                </select>
+                                                                            </li>
+                                                                        </t>
+                                                                    </ul>
+
+                                                                </form>
+                                                            </t>
+                                                            <!--                                                        </form>-->
+                                                            <input type="hidden"
+                                                                   t-att-value="amount_to_buy" id="amount_to_buy"/>
+
+                                                            <div class="row">
+                                                                <div class="input-group col-sm-5">
+                                                                    <div class="input-group-prepend">
+                                                                        <a t-attf-href="#"
+                                                                           class="btn btn-secondary change-qty"
+                                                                           aria-label="Remove one" title="Remove one">
+                                                                            <i class="fa fa-minus"/>
+                                                                        </a>
+                                                                    </div>
+                                                                    <input type="text" class="form-control pl-3"
+                                                                           data-min="1" name="quantity" id="quantity"
+                                                                           t-att-value="quantity"/>
+                                                                    <div class="input-group-append">
+                                                                        <a t-attf-href="#"
+                                                                           class="btn btn-secondary float_left change-qty"
+                                                                           aria-label="Add one" title="Add one">
+                                                                            <i class="fa fa-plus"/>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="input-group col-sm-7 pl-0">
+                                                                    <div class="input-group-prepend mt-1">
+                                                                        <strong>Price</strong>
+                                                                    </div>
+                                                                    <input type="text"
+                                                                           class="form-control col-sm-8 ml-2"
+                                                                           data-min="1" name="price" id="price"
+                                                                           t-att-value="price"/>
+                                                                    <div class="input-group-append mt-1 ml-2 pull-right">
+                                                                        <span t-esc="currency.symbol"/>
+                                                                        <input type="hidden" id="currency"
+                                                                               t-att-value="currency.id"/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="wrapper" t-if="product_id and vendor_line_ids">
+                                                                <t t-foreach="vendor_line_ids" t-as="vendor">
+                                                                    <div class="box" t-att-data-id="vendor.name.id"
+                                                                         t-att-data-price="vendor.price">
+                                                                        <span t-esc="vendor.name.name"/>
+                                                                    </div>
+                                                                </t>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </main>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-4">
+                                <div class="card js_cart_summary">
+                                    <div class="card-body">
+                                        <h4 class="d-none d-xl-block">Order Total</h4>
+                                        <hr class="d-none d-xl-block"/>
+                                        <div>
+                                            <table class="table">
+                                                <tbody>
+                                                    <tr id="order_total_untaxed">
+                                                        <td class="text-right noborder">
+                                                            Subtotal:
+                                                        </td>
+                                                        <td class="text-xl-right noborder">
+                                                            <span t-esc="amount_untaxed" id="amount_untaxed"
+                                                                  style="white-space: nowrap;"
+                                                                  t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="order_total_taxes">
+                                                        <td class="text-right noborder">
+                                                            <p>Taxes:</p>
+                                                            <input type="hidden" id="tax_id"
+                                                                   t-att-value="tax.id if tax else False"/>
+                                                        </td>
+                                                        <td class="text-xl-right noborder">
+                                                            <span t-esc="amount_tax" id="amount_tax"
+                                                                  style="white-space: nowrap;"
+                                                                  t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr id="order_total">
+                                                        <td class="text-right">
+                                                            <strong>Total:</strong>
+                                                        </td>
+                                                        <td class="text-xl-right">
+                                                            <strong t-esc="amount_total" id="amount_total"
+                                                                    t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                                        </td>
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+        <template id="portal_my_home_purchase_request" name="Portal My Home : purchase request entry" inherit_id="portal.portal_my_home" priority="26">
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <t t-if="purchase_request_count" t-call="portal.portal_docs_entry">
+                    <t t-set="title">Purchase Request Orders</t>
+                    <t t-set="url" t-value="'/orders'"/>
+                    <t t-set="count" t-value="purchase_request_count"/>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</odoo>

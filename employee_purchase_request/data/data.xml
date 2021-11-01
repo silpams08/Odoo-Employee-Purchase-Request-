@@ -1,0 +1,402 @@
+<odoo>
+    <data noupdate="0">
+        <!--        SUBSCRIPTION SEQUENCE           -->
+
+        <record id="seq_purchase_request" model="ir.sequence">
+            <field name="name">Purchase Request</field>
+            <field name="code">purchase.request</field>
+            <field name="prefix">Order-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="product_attribute_color" model="product.attribute">
+            <field name="name">Color</field>
+            <field name="type">select</field>
+        </record>
+
+        <record id="product_attribute_value_black" model="product.attribute.value">
+            <field name="name">Black</field>
+            <field name="attribute_id" ref="product_attribute_color"/>
+        </record>
+
+        <record id="product_attribute_value_blue" model="product.attribute.value">
+            <field name="name">Blue</field>
+            <field name="attribute_id" ref="product_attribute_color"/>
+        </record>
+
+        <record id="product_attribute_size" model="product.attribute">
+            <field name="name">Size</field>
+            <field name="type">select</field>
+        </record>
+
+        <record id="product_attribute_value_s" model="product.attribute.value">
+            <field name="name">S</field>
+            <field name="attribute_id" ref="product_attribute_size"/>
+        </record>
+
+        <record id="product_attribute_value_m" model="product.attribute.value">
+            <field name="name">M</field>
+            <field name="attribute_id" ref="product_attribute_size"/>
+        </record>
+        <record id="product_attribute_value_l" model="product.attribute.value">
+            <field name="name">L</field>
+            <field name="attribute_id" ref="product_attribute_size"/>
+        </record>
+        <record id="product_attribute_value_xl" model="product.attribute.value">
+            <field name="name">XL</field>
+            <field name="attribute_id" ref="product_attribute_size"/>
+        </record>
+
+        <record id="order_reject_email_template" model="mail.template">
+            <field name="name">Order Rejected</field>
+            <field name="model_id" ref="employee_purchase_request.model_purchase_request"/>
+            <field name="subject">Order ${object.name} Rejected</field>
+            <field name="email_from">"${object.company_id.name|safe}" &lt;${(object.company_id.email or user.email)|safe}&gt;</field>
+            <field name="email_to">${object.employee_id.work_email}</field>
+            <field name="body_html" type="html">
+<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
+<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+<tbody>
+    <!-- HEADER -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="middle">
+                    <span style="font-size: 10px;">Order Rejected</span><br/>
+                    <span style="font-size: 20px; font-weight: bold;">
+                        ${object.name}
+                    </span>
+                </td><td valign="middle" align="right">
+                    <img src="/logo.png?company=${object.company_id.id}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="${object.company_id.name}"/>
+                </td></tr>
+                <tr><td colspan="2" style="text-align:center;">
+                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+    <!-- CONTENT -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="top" style="font-size: 13px;">
+                    <div>
+                        Dear ${object.employee_id.name},<br/><br/>
+                        Sadly your order was rejected for this month, but you can create
+                        a new one for the same product or a different one next month.<br/>
+                        <div style="margin: 16px 0px 16px 0px;">
+                            <a href="/orders/${object.id}"
+                                style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                Order ${object.name}
+                            </a>
+                        </div>
+                        Regards,<br/><br />
+                    </div>
+                </td></tr>
+                <tr><td style="text-align:center;">
+                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+    <!-- FOOTER -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="middle" align="left">
+                    ${object.company_id.name}
+                </td></tr>
+                <tr><td valign="middle" align="left" style="opacity: 0.7;">
+                    ${object.company_id.phone}
+                    % if object.company_id.email
+                        | <a href="'mailto:%s' % ${object.company_id.email}" style="text-decoration:none; color: #454748;">${object.company_id.email}</a>
+                    % endif
+                    % if object.company_id.website
+                        | <a href="'%s' % ${object.company_id.website}" style="text-decoration:none; color: #454748;">
+                        ${object.company_id.website}
+                    </a>
+                    % endif
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+</tbody>
+</table>
+</td></tr>
+<!-- POWERED BY -->
+<tr><td align="center" style="min-width: 590px;">
+    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
+      <tr><td style="text-align: center; font-size: 13px;">
+        Powered by <a target="_blank" href="https://www.odoo.com?utm_source=db&amp;utm_medium=auth" style="color: #875A7B;">Odoo</a>
+      </td></tr>
+    </table>
+</td></tr>
+</table></field>
+            <field name="auto_delete" eval="True"/>
+            <field name="user_signature" eval="False"/>
+        </record>
+
+        <record id="order_approve_email_template" model="mail.template">
+            <field name="name">Order Approved</field>
+            <field name="model_id" ref="employee_purchase_request.model_purchase_request"/>
+            <field name="subject">Order ${object.name} Approved</field>
+            <field name="email_from">"${object.company_id.name|safe}" &lt;${(object.company_id.email or user.email)|safe}&gt;</field>
+            <field name="email_to">${object.employee_id.work_email}</field>
+            <field name="body_html" type="html">
+<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
+<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+<tbody>
+    <!-- HEADER -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="middle">
+                    <span style="font-size: 10px;">Order Approved</span><br/>
+                    <span style="font-size: 20px; font-weight: bold;">
+                        ${object.name}
+                    </span>
+                </td><td valign="middle" align="right">
+                    <img src="/logo.png?company=${object.company_id.id}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="${object.company_id.name}"/>
+                </td></tr>
+                <tr><td colspan="2" style="text-align:center;">
+                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+    <!-- CONTENT -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="top" style="font-size: 13px;">
+                    <div>
+                        Dear ${object.employee_id.name},<br/><br/>
+                        Your manager has approved the order.<br/>
+                        Please go to your order and click on the button “Buy product”.<br/>
+                        <div style="margin: 16px 0px 16px 0px;">
+                            <a href="/orders/${object.id}"
+                                style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                Order ${object.name}
+                            </a>
+                        </div>
+                        Regards,<br/><br />
+                    </div>
+                </td></tr>
+                <tr><td style="text-align:center;">
+                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+    <!-- FOOTER -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="middle" align="left">
+                    ${object.company_id.name}
+                </td></tr>
+                <tr><td valign="middle" align="left" style="opacity: 0.7;">
+                    ${object.company_id.phone}
+                    % if object.company_id.email
+                        | <a href="'mailto:%s' % ${object.company_id.email}" style="text-decoration:none; color: #454748;">${object.company_id.email}</a>
+                    % endif
+                    % if object.company_id.website
+                        | <a href="'%s' % ${object.company_id.website}" style="text-decoration:none; color: #454748;">
+                        ${object.company_id.website}
+                    </a>
+                    % endif
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+</tbody>
+</table>
+</td></tr>
+<!-- POWERED BY -->
+<tr><td align="center" style="min-width: 590px;">
+    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
+      <tr><td style="text-align: center; font-size: 13px;">
+        Powered by <a target="_blank" href="https://www.odoo.com?utm_source=db&amp;utm_medium=auth" style="color: #875A7B;">Odoo</a>
+      </td></tr>
+    </table>
+</td></tr>
+</table></field>
+            <field name="auto_delete" eval="True"/>
+            <field name="user_signature" eval="False"/>
+        </record>
+
+        <record id="order_creation_email_template" model="mail.template">
+            <field name="name">New Order Creation</field>
+            <field name="model_id" ref="employee_purchase_request.model_purchase_request"/>
+            <field name="subject">New Order ${object.name}</field>
+            <field name="email_from">"${object.company_id.name|safe}" &lt;${(object.company_id.email or user.email)|safe}&gt;</field>
+            <field name="email_to">${object.get_email_to("employee_purchase_request.group_manager_portal")}</field>
+            <field name="body_html" type="html">
+<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
+<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+<tbody>
+    <!-- HEADER -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="middle">
+                    <span style="font-size: 10px;">New Orders</span><br/>
+                    <span style="font-size: 20px; font-weight: bold;">
+                        ${object.name}
+                    </span>
+                </td><td valign="middle" align="right">
+                    <img src="/logo.png?company=${object.company_id.id}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="${object.company_id.name}"/>
+                </td></tr>
+                <tr><td colspan="2" style="text-align:center;">
+                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+    <!-- CONTENT -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="top" style="font-size: 13px;">
+                    <div>
+                        Dear ${object.get_managers()},<br/><br/>
+                        The employee ${object.employee_id.name} has requested the following product: ${object.product_id.name}.<br/>
+                        Please, check the order here: URL to approve it or reject it.<br/>
+                        <div style="margin: 16px 0px 16px 0px;">
+                            <a href="/orders/${object.id}"
+                                style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                New Order ${object.name}
+                            </a>
+                        </div>
+                        Regards,<br/><br />
+                    </div>
+                </td></tr>
+                <tr><td style="text-align:center;">
+                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+    <!-- FOOTER -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="middle" align="left">
+                    ${object.company_id.name}
+                </td></tr>
+                <tr><td valign="middle" align="left" style="opacity: 0.7;">
+                    ${object.company_id.phone}
+                    % if object.company_id.email
+                        | <a href="'mailto:%s' % ${object.company_id.email}" style="text-decoration:none; color: #454748;">${object.company_id.email}</a>
+                    % endif
+                    % if object.company_id.website
+                        | <a href="'%s' % ${object.company_id.website}" style="text-decoration:none; color: #454748;">
+                        ${object.company_id.website}
+                    </a>
+                    % endif
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+</tbody>
+</table>
+</td></tr>
+<!-- POWERED BY -->
+<tr><td align="center" style="min-width: 590px;">
+    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
+      <tr><td style="text-align: center; font-size: 13px;">
+        Powered by <a target="_blank" href="https://www.odoo.com?utm_source=db&amp;utm_medium=auth" style="color: #875A7B;">Odoo</a>
+      </td></tr>
+    </table>
+</td></tr>
+</table></field>
+            <field name="auto_delete" eval="True"/>
+            <field name="user_signature" eval="False"/>
+        </record>
+
+
+
+        <record id="ready_to_pick_email_template" model="mail.template">
+            <field name="name">Ready to pick-up</field>
+            <field name="model_id" ref="employee_purchase_request.model_purchase_request"/>
+            <field name="subject">Ready to pick-up Product ${object.product_id.name}</field>
+            <field name="email_from">"${object.company_id.name|safe}" &lt;${(object.company_id.email or user.email)|safe}&gt;</field>
+            <field name="email_to">${(object.employee_id.work_email)}</field>
+            <field name="body_html" type="html">
+<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
+<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+<tbody>
+    <!-- HEADER -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="middle">
+                    <span style="font-size: 10px;">Purchase Request Orders</span><br/>
+                    <span style="font-size: 20px; font-weight: bold;">
+                        ${object.name}
+                    </span>
+                </td><td valign="middle" align="right">
+                    <img src="/logo.png?company=${object.company_id.id}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="${object.company_id.name}"/>
+                </td></tr>
+                <tr><td colspan="2" style="text-align:center;">
+                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+    <!-- CONTENT -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="top" style="font-size: 13px;">
+                    <div>
+                        Dear ${object.employee_id.name},<br/><br/>
+                        your product ${object.product_id.name} from the order ${object.name} is ready.<br/>
+                        You can pick it at the office on <strong>${object.picking_date}</strong><br/>
+                        Regards,<br/><br />
+                    </div>
+                </td></tr>
+                <tr><td style="text-align:center;">
+                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+    <!-- FOOTER -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="middle" align="left">
+                    ${object.company_id.name}
+                </td></tr>
+                <tr><td valign="middle" align="left" style="opacity: 0.7;">
+                    ${object.company_id.phone}
+                    % if object.company_id.email
+                        | <a href="'mailto:%s' % ${object.company_id.email}" style="text-decoration:none; color: #454748;">${object.company_id.email}</a>
+                    % endif
+                    % if object.company_id.website
+                        | <a href="'%s' % ${object.company_id.website}" style="text-decoration:none; color: #454748;">
+                        ${object.company_id.website}
+                    </a>
+                    % endif
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+</tbody>
+</table>
+</td></tr>
+<!-- POWERED BY -->
+<tr><td align="center" style="min-width: 590px;">
+    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
+      <tr><td style="text-align: center; font-size: 13px;">
+        Powered by <a target="_blank" href="https://www.odoo.com?utm_source=db&amp;utm_medium=auth" style="color: #875A7B;">Odoo</a>
+      </td></tr>
+    </table>
+</td></tr>
+</table></field>
+            <field name="auto_delete" eval="True"/>
+            <field name="user_signature" eval="False"/>
+        </record>
+    </data>
+</odoo>
